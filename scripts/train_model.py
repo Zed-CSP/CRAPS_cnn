@@ -8,6 +8,14 @@ import json
 import numpy as np
 from models.cnn_model import create_cnn_model
 
+# Add these constants at the top of the file
+NUM_CLASSES = 36  # 6x6 possible dice combinations
+IMAGE_SIZE = (1024, 1024)
+TRAIN_DIR = "data/processed/train"
+VAL_DIR = "data/processed/val"
+EPOCHS = 50
+BATCH_SIZE = 32
+
 def load_dataset(data_dir, batch_size=32):
     """
     Load and preprocess the dataset from the given directory.
@@ -20,27 +28,23 @@ def load_dataset(data_dir, batch_size=32):
     labels = []
     for item in annotations:
         img_path = os.path.join(data_dir, item['image'])
-        img = tf.keras.preprocessing.image.load_img(img_path, target_size=(1024, 1024))
+        img = tf.keras.preprocessing.image.load_img(img_path, target_size=IMAGE_SIZE)
         img_array = tf.keras.preprocessing.image.img_to_array(img)
         images.append(img_array)
         
-        # Ensure dice values are within valid range (1-6)
-        die_one = max(1, min(6, item['die_one']))
-        die_two = max(1, min(6, item['die_two']))
-        
         # Create label (0-35 for all possible combinations)
-        label = (die_one - 1) * 6 + (die_two - 1)
+        die_one = max(1, min(6, item['die_one'])) - 1
+        die_two = max(1, min(6, item['die_two'])) - 1
+        label = die_one * 6 + die_two
         labels.append(label)
     
     # Convert to numpy arrays
-    images = np.array(images)
-    labels = np.array(labels)
+    images = np.array(images, dtype='float32')
+    labels = np.array(labels, dtype='int32')
     
-    # Create one-hot encoded labels
-    labels = tf.keras.utils.to_categorical(labels, num_classes=36)
-    
+    # Create dataset
     dataset = tf.data.Dataset.from_tensor_slices((images, labels))
-    dataset = dataset.map(lambda x, y: (x / 255.0, y))  # Normalize images
+    dataset = dataset.map(lambda x, y: (x / 255.0, tf.one_hot(y, NUM_CLASSES)))
     dataset = dataset.shuffle(1000).batch(batch_size)
     
     return dataset
@@ -77,12 +81,6 @@ def train_model(train_dir, val_dir, epochs=50, batch_size=32):
     return model, history
 
 if __name__ == "__main__":
-    # Training configuration
-    TRAIN_DIR = "data/processed/train"
-    VAL_DIR = "data/processed/val"
-    EPOCHS = 50
-    BATCH_SIZE = 32
-    
     # Train the model
     model, history = train_model(TRAIN_DIR, VAL_DIR, EPOCHS, BATCH_SIZE)
     
