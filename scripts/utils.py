@@ -3,7 +3,6 @@ import json
 import os
 import shutil
 from math import floor
-import questionary
 
 def convert_xml_to_json(xml_path, json_path):
     """
@@ -81,9 +80,9 @@ def prompt_user_for_paths():
     Returns:
         dict: A dictionary containing the paths.
     """
-    xml_path = questionary.text("Enter the path to the XML file:").ask()
-    images_dir = questionary.text("Enter the path to the images directory:").ask()
-    output_dir = questionary.text("Enter the path to save the split datasets:").ask()
+    xml_path = input("Enter the path to the XML file: ")
+    images_dir = input("Enter the path to the images directory: ")
+    output_dir = input("Enter the path to save the split datasets: ")
     
     return {
         "xml_path": xml_path,

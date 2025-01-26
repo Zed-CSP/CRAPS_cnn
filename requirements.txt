@@ -1,0 +1,8 @@
+tensorflow-macos; sys_platform == 'darwin' and platform_machine == 'arm64'  # For M1/M2 Macs
+tensorflow; sys_platform != 'darwin' or platform_machine != 'arm64'  # For all other systems
+numpy
+opencv-python
+matplotlib
+seaborn
+scikit-learn
+pillow 

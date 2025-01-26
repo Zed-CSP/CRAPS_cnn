@@ -1,6 +1,10 @@
+import sys
+import os
+# Add the project root directory to Python path
+sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+
 import tensorflow as tf
 import json
-import os
 from models.cnn_model import create_cnn_model
 
 def load_dataset(data_dir, batch_size=32):
