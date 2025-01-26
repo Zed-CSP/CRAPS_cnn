@@ -19,10 +19,10 @@ pip install -r requirements.txt
 ```bash
 python scripts/utils.py
 ```
-# This will prompt you for:
-# - Path to XML file (e.g., "data/raw/kaggle/roll-detection/output/rolls.xml")
-# - Path to images directory (e.g., "data/raw/kaggle/roll-detection/images/")
-# - Output directory (e.g., "data/processed/")
+### This will prompt you for:
+ - Path to XML file (e.g., "data/raw/kaggle/roll-detection/output/rolls.xml")
+ - Path to images directory (e.g., "data/raw/kaggle/roll-detection/images/")
+ - Output directory (e.g., "data/processed/")
 
 
 2. **Train the model** using the training script:
@@ -30,33 +30,33 @@ python scripts/utils.py
 ```bash
 python scripts/train_model.py
 ```
-# This will:
-# - Load and preprocess the data
-# - Train the model
-# - Save the trained model to 'models/final_model.h5'
-# - Create checkpoints in the 'checkpoints' directory
-# - Save TensorBoard logs in the 'logs' directory
+### This will:
+ - Load and preprocess the data
+ - Train the model
+ - Save the trained model to 'models/final_model.h5'
+ - Create checkpoints in the 'checkpoints' directory
+ - Save TensorBoard logs in the 'logs' directory
 
 3. **Evaluate the model** using the evaluation script:
 
 ```bash
 python scripts/eval_model.py
 ```
-# This will:
-# - Load the trained model
-# - Evaluate on test data
-# - Generate classification report
-# - Create confusion matrix visualization
+### This will:
+ - Load the trained model
+ - Evaluate on test data
+ - Generate classification report
+ - Create confusion matrix visualization
 
 4. **Visualize the model** using the visualization script:
 
 ```bash
 python scripts/visualize_model.py
 ```
-# This will:
-# - Create model architecture diagram
-# - Visualize feature maps
-# - Generate class activation maps
+### This will:
+ - Create model architecture diagram
+ - Visualize feature maps
+ - Generate class activation maps
 
 5. (optional) **Visualize the training process** using TensorBoard:
 ```bash
