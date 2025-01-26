@@ -28,7 +28,7 @@ def create_cnn_model(input_shape=(1024, 1024, 3), num_classes=12):
     model.add(layers.Flatten())
     model.add(layers.Dense(512, activation='relu'))
     model.add(layers.Dropout(0.5))
-    model.add(layers.Dense(num_classes, activation='softmax'))
+    model.add(layers.Dense(36, activation='softmax'))
 
     # Compile the model
     model.compile(optimizer='adam',
