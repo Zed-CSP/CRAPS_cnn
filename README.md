@@ -1,2 +1,2 @@
 # CRAPS_cnn
-Convolutional Recognition and Analysis for Probabilistic Scoring (diceroll CV)
+(C)onvolutional (R)ecognition and (A)nalysis for (P)robabilistic (S)coring ...a diceroll CV!
