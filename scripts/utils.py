@@ -3,6 +3,7 @@ import json
 import os
 import shutil
 from math import floor
+import questionary
 
 def convert_xml_to_json(xml_path, json_path):
     """
@@ -74,13 +75,28 @@ def split_dataset(json_path, images_dir, output_dir):
         with open(os.path.join(split_dir, 'annotations.json'), 'w') as split_json:
             json.dump(splits[split], split_json, indent=4)
 
-if __name__ == "__main__":
-    # Example usage
-    xml_path = "data/raw/kaggle/rolldetection/output/rolls.xml"  # Replace with a prompted XML file path later
-    json_path = "data/raw/kaggle/rolldetection/output/rolls.json"  # Replace with prompted JSON file path later
-    images_dir = "data/raw/kaggle/rolldetection/input"  # replace with prompted images directory later
-    output_dir = "data"  # Directory to save splits (train, val, test will be created here)
+def prompt_user_for_paths():
+    """
+    Prompt the user for input, output, and image directory paths.
+    Returns:
+        dict: A dictionary containing the paths.
+    """
+    xml_path = questionary.text("Enter the path to the XML file:").ask()
+    images_dir = questionary.text("Enter the path to the images directory:").ask()
+    output_dir = questionary.text("Enter the path to save the split datasets:").ask()
+    
+    return {
+        "xml_path": xml_path,
+        "images_dir": images_dir,
+        "output_dir": output_dir
+    }
 
-    convert_xml_to_json(xml_path, json_path)
-    split_dataset(json_path, images_dir, output_dir)
-    print(f"Dataset split into train, val, and test sets at {output_dir}")
+if __name__ == "__main__":
+    # Prompt user for paths
+    paths = prompt_user_for_paths()
+    json_path = paths["xml_path"].replace(".xml", ".json")
+
+    # Process dataset
+    convert_xml_to_json(paths["xml_path"], json_path)
+    split_dataset(json_path, paths["images_dir"], paths["output_dir"])
+    print(f"Dataset split into train, val, and test sets at {paths['output_dir']}")
