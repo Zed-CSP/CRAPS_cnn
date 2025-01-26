@@ -5,6 +5,7 @@ sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 import tensorflow as tf
 import json
+import numpy as np
 from models.cnn_model import create_cnn_model
 
 def load_dataset(data_dir, batch_size=32):
@@ -23,9 +24,20 @@ def load_dataset(data_dir, batch_size=32):
         img_array = tf.keras.preprocessing.image.img_to_array(img)
         images.append(img_array)
         
-        # Combine dice values into single label 
-        label = (item['die_one'] - 1) * 6 + (item['die_two'] - 1)
+        # Ensure dice values are within valid range (1-6)
+        die_one = max(1, min(6, item['die_one']))
+        die_two = max(1, min(6, item['die_two']))
+        
+        # Create label (0-35 for all possible combinations)
+        label = (die_one - 1) * 6 + (die_two - 1)
         labels.append(label)
+    
+    # Convert to numpy arrays
+    images = np.array(images)
+    labels = np.array(labels)
+    
+    # Create one-hot encoded labels
+    labels = tf.keras.utils.to_categorical(labels, num_classes=36)
     
     dataset = tf.data.Dataset.from_tensor_slices((images, labels))
     dataset = dataset.map(lambda x, y: (x / 255.0, y))  # Normalize images
